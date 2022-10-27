@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { formatUnits, parseUnits } from '@ethersproject/units';
 import { computed } from 'vue';
 
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import useTokens from '@/composables/useTokens';
 import { bnum } from '@/lib/utils';
-import useWeb3 from '@/services/web3/useWeb3';
 import { PoolToken } from '@/services/pool/types';
+import useWeb3 from '@/services/web3/useWeb3';
 
 /**
  * TYPES
@@ -35,13 +34,9 @@ const { explorerLinks } = useWeb3();
 const tokenInfo = computed(() => getToken(props.poolToken.address));
 
 const balance = computed(() => {
-  const formattedBalance = formatUnits(
-    parseUnits(props.poolToken.balance, props.poolToken.decimals).toString(),
-    tokenInfo.value.decimals
-  );
   return props.share != null
-    ? bnum(formattedBalance).times(props.share).toString()
-    : formattedBalance;
+    ? bnum(props.poolToken.balance).times(props.share).toString()
+    : props.poolToken.balance;
 });
 
 const balanceLabel = computed(() => {
